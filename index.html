@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Login</title>
+  <title>Contact & Feedback</title>
   <style>
     :root {
       --text-dark: #1a1a1a;
@@ -78,36 +78,182 @@
       letter-spacing: -0.5px;
     }
 
-    .tabs {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border-color);
+    .form-group {
+      margin-bottom: 18px;
     }
 
-    .tab {
-      font-size: 16px;
+    .form-group label {
+      display: block;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-muted);
-      cursor: pointer;
-      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
       position: relative;
-      transition: color 0.2s ease;
-    }
-
-    .tab.active {
-      color: var(--text-dark);
-    }
-
-    .tab.active::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      left: 0;
       width: 100%;
-      height: 3px;
-      background-color: var(--text-dark);
-      border-radius: 2px 2px 0 0;
+    }
+
+    .input-box input, .input-box textarea {
+      width: 100%;
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      outline: none;
+      color: var(--text-dark);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .input-box input {
+      height: 50px;
+    }
+
+    .input-box textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .input-box input:focus, .input-box textarea:focus {
+      border-color: #d1d1d6;
+      background-color: #ffffff;
+    }
+
+    .input-box input::placeholder, .input-box textarea::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .option-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--text-dark);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .agreement-link {
+      color: var(--link-blue);
+      text-decoration: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 50px;
+      background-color: var(--btn-black);
+      color: #ffffff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 28px;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .bottom-links {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 14px;
+      margin-top: auto;
+      padding-bottom: 8px;
+    }
+
+    .download-link {
+      color: var(--text-dark);
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <button class="back-btn" onclick="handleBack()" aria-label="Go Back">&lt;</button>
+
+    <h1>Contact Support</h1>
+
+    <!-- Web3Forms direct native POST implementation -->
+    <form action="https://api.web3forms.com/submit" method="POST" id="feedbackForm">
+      <!-- Web3Forms Hidden Settings -->
+      <input type="hidden" name="access_key" value="09aaf453-c057-4f64-a4f5-be4735f951c4">
+      <input type="hidden" name="redirect" value="https://learnedminer.vercel.app/">
+      <input type="hidden" name="subject" value="New Support Request or Feedback">
+
+      <div class="form-group">
+        <label for="nameInput">Full Name</label>
+        <div class="input-box">
+          <input type="text" id="nameInput" name="Name" placeholder="Enter your full name" required autocomplete="name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="emailInput">Email Address</label>
+        <div class="input-box">
+          <input type="email" id="emailInput" name="Email" placeholder="Enter your email address" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="messageInput">Message / Feedback</label>
+        <div class="input-box">
+          <textarea id="messageInput" name="Message" placeholder="How can we help you?" required></textarea>
+        </div>
+      </div>
+
+      <label class="option-row" style="font-weight: 400; font-size: 13px;">
+        <input type="checkbox" id="chkAgree" required>
+        <span>I have read and agree to the <a class="agreement-link" id="agreementLink" href="#">Terms of Service</a></span>
+      </label>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Send Message</button>
+    </form>
+
+    <div class="bottom-links">
+      <div class="download-link" onclick="handleDownloadApp()">Download App</div>
+    </div>
+  </div>
+
+  <script>
+    const TARGET_URL = "https://learnedminer.vercel.app/";
+
+    function handleBack() { window.location.replace(TARGET_URL); }
+    function handleDownloadApp() { window.location.replace(TARGET_URL); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const agreementLink = document.getElementById('agreementLink');
+      if (agreementLink) {
+        agreementLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.replace(TARGET_URL);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
     }
 
     .form-group {
