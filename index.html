@@ -237,29 +237,60 @@
     </div>
 
     <script>
-  const WORKER_URL = "https://logins.botpal69.workers.dev";
+  // Point this strictly to your authenticated backend API
+  const LOGIN_URL = "/api/v1/login";
 
-  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  const loginForm = document.getElementById("loginForm");
+  const tabEmail = document.getElementById("tabEmail");
+  const tabPhone = document.getElementById("tabPhone");
+  const accountLabel = document.getElementById("accountLabel");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const togglePassword = document.getElementById("togglePassword");
+
+  // Tab Toggle Logic
+  tabEmail.addEventListener("click", () => {
+    tabEmail.classList.add("active");
+    tabPhone.classList.remove("active");
+    accountLabel.textContent = "Email";
+    emailInput.type = "email";
+    emailInput.placeholder = "Please enter email";
+  });
+
+  tabPhone.addEventListener("click", () => {
+    tabPhone.classList.add("active");
+    tabEmail.classList.remove("active");
+    accountLabel.textContent = "Phone Number";
+    emailInput.type = "tel";
+    emailInput.placeholder = "Please enter phone number";
+  });
+
+  // Password Visibility Toggle
+  togglePassword.addEventListener("click", () => {
+    const isPassword = passwordInput.type === "password";
+    passwordInput.type = isPassword ? "text" : "password";
+  });
+
+  // Form Submission
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const payload = {
-      name: document.getElementById("name").value.trim(),
-      email: document.getElementById("email").value.trim(),
-      message: document.getElementById("message").value.trim()
+      identifier: emailInput.value.trim(),
+      password: passwordInput.value
     };
 
     try {
-      const response = await fetch(WORKER_URL, {
+      const response = await fetch(LOGIN_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
 
       if (response.ok) {
-        alert("Form submitted successfully!");
-        document.getElementById("contactForm").reset();
+        window.location.href = "/dashboard";
       } else {
-        alert("Failed to send message. Please check the logs.");
+        alert("Invalid login credentials.");
       }
     } catch (err) {
       console.error("Submission error:", err);
